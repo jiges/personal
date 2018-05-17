@@ -1945,6 +1945,11 @@ public class HashMap<K,V> extends AbstractMap<K,V>
          */
         final void treeify(Node<K,V>[] tab) {
             TreeNode<K,V> root = null;
+            /*
+             * x 当前节点，next 下一节点 对于链表
+             * p 父亲节点 对于树
+             *
+             */
             for (TreeNode<K,V> x = this, next; x != null; x = next) {
                 next = (TreeNode<K,V>)x.next;
                 x.left = x.right = null;
@@ -1954,6 +1959,21 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                     root = x;
                 }
                 else {
+                    /*
+                     * k 当前节点key
+                     * pk 子树根节点key
+                     * h 当前节点hash
+                     * ph 子树根节点hash
+                     * dir 当前节点hash和跟节点hash比较 -1 左子树 1 右子树
+                     *     如果两者hash相同则比较key
+                     * x 当前节点
+                     * p 子树根节点
+                     * xp 父节点
+                     * 循环的逻辑：
+                     * 如果 x 是 p 的左子树并且 p 的左子树为空，则将 x 插入 p 的左子树。
+                     * 如果 p 的左子树已经有子树了，则将 p 换成子树的根节点 继续在此根节点上插入 x 。
+                     * 右子树同上
+                     */
                     K k = x.key;
                     int h = x.hash;
                     Class<?> kc = null;
@@ -1965,8 +1985,17 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                         else if (ph < h)
                             dir = 1;
                         else if ((kc == null &&
+                                /*
+                                 * 如果x的Class形式为 "class C implements Comparable<C>" 则返回该class 否则 返回null
+                                 */
                                 (kc = comparableClassFor(k)) == null) ||
+                                /*
+                                 * 如果kc支持compareTo则返回他们的比较 否则返回0
+                                 */
                                 (dir = compareComparables(kc, k, pk)) == 0)
+                            /*
+                             * 如果父节点和当前节点key值无法比较，则比较他们的地址，该地址其实是 Object.hashCode()的返回
+                             */
                             dir = tieBreakOrder(k, pk);
 
                         TreeNode<K,V> xp = p;
@@ -1976,6 +2005,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                                 xp.left = x;
                             else
                                 xp.right = x;
+                            //将树结构调整为标准的红黑树结构（通过着色和旋转）
                             root = balanceInsertion(root, x);
                             break;
                         }
