@@ -1941,7 +1941,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
          * @return root of tree
          */
         /*
-         * 将此节点链接出去的所有节点转化为树
+         * 将此节点链接出去的所有节点转化为树，转化为树后，该槽位上的所有Entry将呈现两种视图  双向链表 红黑树
+         * 并将红黑树的根节点移动到列表的第一个节点
          */
         final void treeify(Node<K,V>[] tab) {
             TreeNode<K,V> root = null;
@@ -2012,12 +2013,16 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                     }
                 }
             }
+            //将红黑树的根节点移动到列表的第一个节点
             moveRootToFront(tab, root);
         }
 
         /**
          * Returns a list of non-TreeNodes replacing those linked from
          * this node.
+         */
+        /*
+         * 还原树状结构，取消他的树状视图，还原后的顺序有可能会变化，因为头结点被更换了
          */
         final Node<K,V> untreeify(HashMap<K,V> map) {
             Node<K,V> hd = null, tl = null;

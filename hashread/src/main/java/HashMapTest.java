@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -32,12 +33,18 @@ public class HashMapTest {
         m.put("bDDd",null);
         m.put("bDEE",null);
         m.put("bDF&",null);
-//        m.put("bE%d",null);
-//        m.put("bE&E",null);
-//        m.put("bE'&",null);
-//        m.put("b&",null);
-//        m.put("c$cd",null);
+        m.put("bE%d",null);
+        m.put("bE&E",null);
+        m.put("bE'&",null);
+        m.put("c$cd",null);
+        Iterator<Map.Entry<String,Object>> it = m.entrySet().iterator();
+
         System.out.println(m);
         System.out.println(m.hashCode());
+
+        System.out.println("打印空心菱形");
+        System.out.println("  *  \n * * \n  *  ");
+//        System.out.println("");
+//        System.out.println("");
     }
 }
