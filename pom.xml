@@ -16,6 +16,7 @@
         <module>dynamicproxy</module>
         <module>concurrent</module>
         <module>hashread</module>
+        <module>StringTest</module>
     </modules>
 
     <build>
