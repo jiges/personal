@@ -17,7 +17,15 @@
         <module>concurrent</module>
         <module>hashread</module>
         <module>StringTest</module>
+        <module>serialize</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>aliyunmaven</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
