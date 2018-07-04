@@ -16,48 +16,48 @@ import java.util.concurrent.*;
 public class ThreadPoolDemo {
 
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newCachedThreadPool();
-
-        List<Future<String>> futureList = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            futureList.add(executorService.submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-//                    Thread.sleep(1000);
-                    Thread.sleep(new Random().nextInt(1000) + 1000);
-                    return "I'm executed by thread " + Thread.currentThread().getName();
-                }
-            }));
-            Thread.sleep(50);
-        }
-
-        for (int i = 0; i < 10; i++) {
-            System.out.println(futureList.get(i).get());
-        }
-        executorService.shutdown();
-    }
-
 //    public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        ExecutorService executorService = Executors.newCachedThreadPool();
-//        CompletionService<String> completionService = new ExecutorCompletionService<>(executorService);
+//
+//        List<Future<String>> futureList = new ArrayList<>();
 //
 //        for (int i = 0; i < 10; i++) {
-//            completionService.submit(new Callable<String>() {
+//            futureList.add(executorService.submit(new Callable<String>() {
 //                @Override
 //                public String call() throws Exception {
 ////                    Thread.sleep(1000);
 //                    Thread.sleep(new Random().nextInt(1000) + 1000);
 //                    return "I'm executed by thread " + Thread.currentThread().getName();
 //                }
-//            });
-//            Thread.sleep(50);
+//            }));
+////            Thread.sleep(50);
 //        }
-//
 //        for (int i = 0; i < 10; i++) {
-//            System.out.println(completionService.take().get());
+//
+//            System.out.println(futureList.get(i).get());
 //        }
 //        executorService.shutdown();
 //    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        CompletionService<String> completionService = new ExecutorCompletionService<>(executorService);
+
+        for (int i = 0; i < 10; i++) {
+            completionService.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+//                    Thread.sleep(1000);
+                    Thread.sleep(new Random().nextInt(1000) + 1000);
+                    return "I'm executed by thread " + Thread.currentThread().getName();
+                }
+            });
+            Thread.sleep(50);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println(completionService.take().get());
+        }
+        executorService.shutdown();
+    }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class BlockingQueueDemo {
     public static void main(String[] args) {
-        BlockingQueue<String> queue = new ArrayBlockingQueue(10);
+        BlockingQueue<String> queue = new ArrayBlockingQueue<>(10);
 
         //生产者线程
         new Thread(() ->{
