@@ -18,6 +18,7 @@
         <module>hashread</module>
         <module>StringTest</module>
         <module>serialize</module>
+        <module>sort</module>
     </modules>
 
     <repositories>
