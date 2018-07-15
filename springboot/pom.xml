@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>springboot</artifactId>
-
+    <modules>
+        <module>SpringBootHelloWorld</module>
+    </modules>
 
 </project>
