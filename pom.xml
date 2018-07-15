@@ -18,6 +18,7 @@
         <module>hashread</module>
         <module>StringTest</module>
         <module>serialize</module>
+        <module>algorithm</module>
         <module>sort</module>
         <module>springboot</module>
         <module>referencedemo</module>
