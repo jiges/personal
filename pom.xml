@@ -22,6 +22,7 @@
         <module>sort</module>
         <module>springboot</module>
         <module>referencedemo</module>
+        <module>sharing-file-write</module>
     </modules>
 
     <repositories>
