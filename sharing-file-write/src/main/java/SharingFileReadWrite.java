@@ -10,45 +10,70 @@ import java.util.concurrent.CountDownLatch;
  * 最优的方式写入磁盘。
  */
 public class SharingFileReadWrite {
-    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+//    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+//        CountDownLatch countDownLatch = new CountDownLatch(20);
+//        final RandomAccessFile writer = new RandomAccessFile (new File("D:\\Temp\\data.txt"),"rw");
+//        for (int i = 0; i < 5; i++) {
+//            final int pos = i;
+//            new Thread(() -> {
+//                countDownLatch.countDown();
+//                InputStream inputStream = null;
+//                try {
+////                    inputStream = new FileInputStream(new File("D:\\Temp\\data.txt"));
+////                    byte[] bytes = new byte[3];
+////                    int len = inputStream.read(bytes);
+////                    System.out.println(new String(bytes));
+//
+//                    long nanotime = System.nanoTime();
+//                    System.out.println(Thread.currentThread().getName() + "开始写入");
+//
+//                    writer.seek(pos * 3);
+//                    writer.write(new byte[1024 * 1024 * 300]);
+//                    System.out.println("写入时间：" + System.currentTimeMillis());
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } finally {
+////                    try {
+////                        inputStream.close();
+////                    } catch (IOException e) {
+////                        e.printStackTrace();
+////                    }
+//
+//                }
+//            }).start();
+//        }
+//        Thread.sleep(30000);
+//        try {
+//            writer.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
+
+    public static void main(String[] args) {
         CountDownLatch countDownLatch = new CountDownLatch(20);
-        final RandomAccessFile writer = new RandomAccessFile (new File("D:\\Temp\\data.txt"),"rw");
         for (int i = 0; i < 5; i++) {
             final int pos = i;
             new Thread(() -> {
                 countDownLatch.countDown();
-                InputStream inputStream = null;
                 try {
-//                    inputStream = new FileInputStream(new File("D:\\Temp\\data.txt"));
-//                    byte[] bytes = new byte[3];
-//                    int len = inputStream.read(bytes);
-//                    System.out.println(new String(bytes));
-
+                    RandomAccessFile writer = new RandomAccessFile (new File("D:\\Temp\\data.txt"),"rw");
                     long nanotime = System.nanoTime();
+                    System.out.println(writer.getFD());
                     System.out.println(Thread.currentThread().getName() + "开始写入");
-
                     writer.seek(pos * 3);
-                    writer.write(new byte[1024 * 1024 * 300]);
+                    writer.write(new byte[1024 * 1024 * 100]);
                     System.out.println("写入时间：" + System.currentTimeMillis());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-//                    try {
-//                        inputStream.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-
                 }
             }).start();
-        }
-        Thread.sleep(30000);
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }
