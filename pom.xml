@@ -24,6 +24,7 @@
         <module>referencedemo</module>
         <module>sharing-file-write</module>
         <module>sax</module>
+        <module>jmxdemo</module>
     </modules>
 
     <repositories>
