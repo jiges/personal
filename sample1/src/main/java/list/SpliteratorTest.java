@@ -17,7 +17,18 @@ public class SpliteratorTest {
         arrs.add("i");
         arrs.add("j");
         Spliterator<String> a =  arrs.spliterator();
-        a.forEachRemaining(System.out::print);
+        System.out.println(a.tryAdvance(System.out::println));
+
+//        a.forEachRemaining(System.out::println);
+        Spliterator<String> b =  a.trySplit();
+        System.out.println(a.estimateSize());
+        Spliterator<String> c=  b.trySplit();
+        a.forEachRemaining(System.out::println);
+        System.out.println(a.estimateSize());
+        System.out.println("-----");
+        b.forEachRemaining(System.out::println);
+        System.out.println("-----");
+        c.forEachRemaining(System.out::println);
 //        System.out.println(a.characteristics());
     }
 }
