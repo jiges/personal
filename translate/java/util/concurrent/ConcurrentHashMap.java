@@ -43,9 +43,9 @@
  * 检索反映的是最近已完成更新操作的结果。换个说法，对于一个给定key的更新操作happens-before
  * 于这个key的检索操作（代码中通过volatile实现）。对于{@code put All}和{@code clear}等聚合操作，
  * 并发的检索可能只能反映一部分也结果（聚合操作不是原子性的）。相似的迭代器和枚举返回散列表基于某个点的状态，
- * 或者迭代器和枚举创建时的状态。他们不会抛出ConcurrentModificationException.
+ * 或者迭代器和枚举创建时的状态。他们不会抛出ConcurrentModificationException（spliterator报告了Concurrent特性）.
  * 然后迭代器被设计成没成只能被一个线程访问。迭代器被设计成没成只能被一个线程访问。
- * 请记住，聚合状态方法的结果（包括{@code size}，{@code isEmpty}和{@code containsValue}
+ * 请记住，统计方法的结果（包括{@code size}，{@code isEmpty}和{@code containsValue}
  * 通常仅在Map未在其他线程中进行并发更新时才有用。（size返回的不一定是准确的值，或许是估计值）
  * 但是，这些方法的结果反映了可能足以用于监视或估计目的的瞬态，但不适用于程序控制。
  *
@@ -72,7 +72,7 @@
  * this class may use comparison order among keys to help break ties.
  *
  * 当碰撞太多时，表会动态扩展,扩容的加载因子是0.75（这维持了哈希表的普遍接受的时间/空间权衡）。
- * 但是，调整此大小或任何其他类型的散列表可能是一个相对较慢的操作。
+ * 但是，调整大小或任何其他类型的散列表可能是一个相对较慢的操作。
  * 因此，在构造Map时指定一个合适的大小会有效提高效率。（太大了浪费空间，太小了增加竞争几率）
  * 此外，为了与此类的先前版本兼容，构造函数可以选择指定预期的{@code concurrencyLevel}作为内部大小调整的附加提示。
  * 注意，使用多数hashCode相同的键，会严重降低哈希表的性能。
@@ -84,6 +84,20 @@
  * mapped values are (perhaps transiently) not used or all take the
  * same mapping value.
  *
+ * ConcurrentHashMap的Set视图可以被(using newKeySet() or newKeySet(int))方法创建
+ * 或者仅在对keys感兴趣时查看（通过keySet(Object)方法），或者是map的值不被用到，或者
+ * 是所有的keys都映射到相同的值
+ *
+ * ConcurrentHashMap.KeySetView keySetView = map.keySet();
+ * keySetView.add(new Object());
+ *
+ * 通过keySet()方法返回的视图，只能检索或者遍历，不能添加，
+ * 上述代码将抛出java.lang.UnsupportedOperationException异常
+ *
+ * ConcurrentHashMap.KeySetView keySetView = map.keySet("same value");
+ * keySetView.add(new Object());
+ *
+ * 上述代码可以进行添加操作，但是添加的map值为"same value"
  *
  *
  * <p>A ConcurrentHashMap can be used as scalable frequency map (a
