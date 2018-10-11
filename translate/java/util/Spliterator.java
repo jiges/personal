@@ -67,7 +67,7 @@ import java.util.function.LongConsumer;
  * report {@code SORTED}.  Characteristics are reported as a simple unioned bit
  * set.
  *
- * pliterator还从ORDERED，DISTINCT，SORTED，SIZED，NONNULL，IMMUTABLE，
+ * spliterator还从ORDERED，DISTINCT，SORTED，SIZED，NONNULL，IMMUTABLE，
  * CONCURRENT和SUBSIZED中报告其结构，源和元素的一组特性集合characteristics()。
  * 这些可以由Spliterator客户端使用来控制，专门化或简化计算。
  * 例如，集合的Spliterator将报告SIZED，集合的Spliterator将报告DISTINCT，
@@ -107,6 +107,9 @@ import java.util.function.LongConsumer;
  * Spliterator应该尽力而为地抛出ConcurrentModificationException异常。这样做的分割器称为fail-fast。
  * Spliterator的批量遍历方法（forEachRemaining()）可以优化遍历，并在所有元素都被遍历之后检查结构干扰，
  * 而不是立即检查每个元素并失败。
+ * 意思就是说有些元素源不支持并发修改，在遍历是如果元素源的结构被修改，将会地抛出ConcurrentModificationException异常
+ * 而且这个检查是在遍历了所有元素后进行的，并不是结构一被修改就抛异常。
+ * 这些不支持并发修改的元素源通常是指那些线程不安全的集合，比如ArrayList等
  *
  * <p>Spliterators can provide an estimate of the number of remaining elements
  * via the {@link #estimateSize} method.  Ideally, as reflected in characteristic
@@ -115,6 +118,10 @@ import java.util.function.LongConsumer;
  * exactly known, an estimated value value may still be useful to operations
  * being performed on the source, such as helping to determine whether it is
  * preferable to split further or traverse the remaining elements sequentially.
+ *
+ * 分割器可以通过estimateSize()方法提供剩余元素数量的估计。 理想情况下，如特征SIZED所反映的那样，
+ * 该值与完成遍历时遇到的元素的数量完全对应。 然而，即使不是完全知道的，
+ * 估计的值对于在源上执行的操作仍然有用，例如有助于确定是否优选进一步分割或者顺序地遍历剩余的元素。
  *
  * <p>Despite their obvious utility in parallel algorithms, spliterators are not
  * expected to be thread-safe; instead, implementations of parallel algorithms
@@ -131,6 +138,18 @@ import java.util.function.LongConsumer;
  * tryAdvance()}, as certain guarantees (such as the accuracy of
  * {@link #estimateSize()} for {@code SIZED} spliterators) are only valid before
  * traversal has begun.
+ *
+ * 尽管它们在并行算法中具有明显的实用性，但spliterator并不一定是线程安全的;
+ * 相反，使用分割器（spliterator）的并行算法的实现应该确保分割器一次只被一个线程使用。
+ * 这通常是通过串行线程限制来获得的，这通常是通过递归分解工作的典型并行算法的自然结果。
+ * 调用trySplit()的线程可以将返回的Spliterator移交给另一个线程，然后可以遍历或进一步拆分该分割器。
+ * 如果两个或多个线程在同一个分割器上同时运行，则分割和遍历的行为是未定义的。
+ * 如如果原始线程将分裂器移交给另一个线程进行处理，
+ * 则最好是在使用tryAdvance()}消耗任何元素之前进行移交，
+ * 因为某些保证（例如，SIZED分割器的estimateSize()的精度）只有在遍历开始之前才有效。
+ *
+ * 这里是说被spliterator绑定的元素源在进行处理时并不一定是线程安全的，它的使用方式应该是
+ * 递归的分割然后将分配后的结果交给其他线程处理。
  *
  * <p>Primitive subtype specializations of {@code Spliterator} are provided for
  * {@link OfInt int}, {@link OfLong long}, and {@link OfDouble double} values.
@@ -151,6 +170,8 @@ import java.util.function.LongConsumer;
  * {@link #forEachRemaining(java.util.function.Consumer) forEachRemaining()}
  * does not affect the order in which the values, transformed to boxed values,
  * are encountered.
+ *
+ * Spliterator的原始特定子类型由int，long和double值提供。
  *
  * @apiNote
  * <p>Spliterators, like {@code Iterators}s, are for traversing the elements of

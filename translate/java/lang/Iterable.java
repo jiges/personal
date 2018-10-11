@@ -46,6 +46,8 @@ import java.util.function.Consumer;
 /**
  * 继承这个接口，允许对象成为"for-each loop"语句的对象。
  * 关于"for-each loop"参考 https://docs.oracle.com/javase/8/docs/api/
+ *
+ * 改接口提供两种遍历方式，串行遍历和并行遍历
  */
 public interface Iterable<T> {
     /**
