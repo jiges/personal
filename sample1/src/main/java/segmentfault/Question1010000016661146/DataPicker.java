@@ -2,6 +2,19 @@ package segmentfault.Question1010000016661146;
 
 import java.util.*;
 
+/**
+ * java-多维度求最优解
+ * 拿出11条数据
+ * 条件
+ * 每个位置(position)的人数限制
+ * 每队(team)人数不能超过7人
+ * credits的总和在100分之内（包含100）
+ * 总分(points)最高
+ *
+ * 位置人数限制
+ * position-1 : 1 position-2 : 3-5 position-3 : 1-3 position-4 : 3-5
+ * @author ccr12312@163.com at 2018-10-13
+ */
 public class DataPicker {
 
     //总分(points)最高
