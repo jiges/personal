@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,13 +21,15 @@ public class SpringBootApplication {
         Map<String, Object> defaultMap = new HashMap<String, Object>();
         //设置数据库连接
         defaultMap.put("spring.datasource.driverClassName", "com.mysql.jdbc.Driver");
-        defaultMap.put("spring.datasource.url", "jdbc:mysql://192.168.100.177:3306/ahamp-cms?useUnicode=true&characterEncoding=utf-8");
+        defaultMap.put("spring.datasource.url", "jdbc:mysql://192.168.1.105:3306/sakila?useUnicode=true&characterEncoding=utf-8");
         defaultMap.put("spring.datasource.username", "root");
-        defaultMap.put("spring.datasource.password", "5Yg6f4x1%bDiX%Q*");
+//        defaultMap.put("spring.datasource.password", "5Yg6f4x1%bDiX%Q*");
+        defaultMap.put("spring.datasource.password", "root");
         application.setDefaultProperties(defaultMap);
         ApplicationContext context = application.run(args);
 
-        SpringTransaction transaction = context.getBean("springTransaction",SpringTransaction.class);
+        //调用事物1
+        SpringTransaction_1 transaction = context.getBean("springTransaction_1", SpringTransaction_1.class);
         transaction.transaction_1();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
