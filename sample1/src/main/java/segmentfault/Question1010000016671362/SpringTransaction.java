@@ -14,7 +14,8 @@ public class SpringTransaction {
     private JdbcTemplate jdbcTemplate;
 
     public void transaction_1(){
-        List<Map<String,Object>> list = jdbcTemplate.queryForList("select * from test");
+        List<Map<String,Object>> list = jdbcTemplate.queryForList("select * from article");
+        list.forEach(System.out::println);
     }
 
     public void transaction_2(){
