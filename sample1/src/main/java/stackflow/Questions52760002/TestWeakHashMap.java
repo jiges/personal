@@ -17,7 +17,7 @@ public class TestWeakHashMap {
         key = null;
         System.gc();
         Thread.sleep(1000);
-        System.out.println(map);
+        System.out.println(map.size());
 
 
     }
